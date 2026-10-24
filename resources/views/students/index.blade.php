@@ -132,24 +132,28 @@
                         View Profile
                     </a>
 
-                    <a href="{{ route('students.edit', $student) }}"
-                       class="btn btn-outline-secondary">
-                        <i class="bi bi-pencil"></i>
-                    </a>
+                    @can('update', $student)
+                        <a href="{{ route('students.edit', $student) }}"
+                           class="btn btn-outline-secondary">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    @endcan
 
-                    <form action="{{ route('students.destroy', $student) }}"
-                          method="POST"
-                          onsubmit="return confirm('Are you sure you want to delete this student?');">
+                    @can('delete', $student)
+                        <form action="{{ route('students.destroy', $student) }}"
+                              method="POST"
+                              onsubmit="return confirm('Are you sure you want to delete this student?');">
 
-                        @csrf
-                        @method('DELETE')
+                            @csrf
+                            @method('DELETE')
 
-                        <button type="submit"
-                                class="btn btn-outline-danger">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                            <button type="submit"
+                                    class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
 
-                    </form>
+                        </form>
+                    @endcan
 
                 </div>
 

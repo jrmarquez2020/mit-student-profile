@@ -93,30 +93,34 @@
 
                 <div class="d-flex gap-2">
 
-                    <a href="{{ route('students.edit', $student) }}"
-                       class="btn btn-outline-primary">
+                    @can('update', $student)
+                        <a href="{{ route('students.edit', $student) }}"
+                           class="btn btn-outline-primary">
 
-                        <i class="bi bi-pencil"></i>
-                        Edit
+                            <i class="bi bi-pencil"></i>
+                            Edit
 
-                    </a>
+                        </a>
+                    @endcan
 
-                    <form action="{{ route('students.destroy', $student) }}"
-                          method="POST"
-                          onsubmit="return confirm('Are you sure you want to delete this student?');">
+                    @can('delete', $student)
+                        <form action="{{ route('students.destroy', $student) }}"
+                              method="POST"
+                              onsubmit="return confirm('Are you sure you want to delete this student?');">
 
-                        @csrf
-                        @method('DELETE')
+                            @csrf
+                            @method('DELETE')
 
-                        <button type="submit"
-                                class="btn btn-outline-danger">
+                            <button type="submit"
+                                    class="btn btn-outline-danger">
 
-                            <i class="bi bi-trash"></i>
-                            Delete
+                                <i class="bi bi-trash"></i>
+                                Delete
 
-                        </button>
+                            </button>
 
-                    </form>
+                        </form>
+                    @endcan
 
                 </div>
 

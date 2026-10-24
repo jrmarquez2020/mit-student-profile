@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
 use App\Models\Course;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -13,9 +13,14 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::with('course')
-            ->latest()
-            ->get();
+        $query = Student::with('course')
+            ->latest();
+
+        if (! auth()->user()->isAdmin()) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $students = $query->get();
 
         return view('students.index', compact('students'));
     }
@@ -43,6 +48,8 @@ class StudentController extends Controller
             'contact_number' => 'required|string|max:30',
         ]);
 
+        $validated['user_id'] = auth()->id();
+
         Student::create($validated);
 
         return redirect()
@@ -65,6 +72,8 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
+        $this->authorize('update', $student);
+
         $courses = Course::orderBy('course_code')->get();
 
         $student->load('course');
@@ -77,6 +86,8 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
+        $this->authorize('update', $student);
+
         $validated = $request->validate([
             'course_id' => 'required|exists:courses,id',
             'name' => 'required|string|max:255',
@@ -97,6 +108,8 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+        $this->authorize('delete', $student);
+
         $student->delete();
 
         return redirect()

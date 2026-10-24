@@ -105,15 +105,32 @@
 
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('students.index') }}">
+        <a class="navbar-brand" href="{{ auth()->check() ? route('dashboard') : route('login') }}">
             <i class="bi bi-mortarboard-fill"></i>
             Student Portfolio
         </a>
 
-        <a href="{{ route('students.create') }}" class="btn btn-primary">
-            <i class="bi bi-person-plus"></i>
-            Add Student
-        </a>
+        @auth
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-light small me-2">{{ auth()->user()->name }}</span>
+                <a href="{{ route('students.create') }}" class="btn btn-primary">
+                    <i class="bi bi-person-plus"></i>
+                    Add Student
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-light">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+                    </button>
+                </form>
+            </div>
+        @else
+            <a href="{{ route('login') }}" class="btn btn-primary">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Login
+            </a>
+        @endauth
     </div>
 </nav>
 
