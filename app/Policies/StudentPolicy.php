@@ -7,6 +7,11 @@ use App\Models\User;
 
 class StudentPolicy
 {
+    public function view(User $user, Student $student): bool
+    {
+        return $user->isAdmin() || $student->user_id === $user->id;
+    }
+
     public function update(User $user, Student $student): bool
     {
         return $user->isAdmin() || $student->user_id === $user->id;
